@@ -79,6 +79,7 @@ end
 
 M.on_attach = function(client, bufnr)
   if client.name == "tsserver" then
+    -- Don't use formatting for typescript, because we'll use prettier instead
     client.resolved_capabilities.document_formatting = false
   end
   lsp_keymaps(bufnr)
