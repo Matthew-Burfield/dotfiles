@@ -1,6 +1,7 @@
 require "matthew.options"
 require "matthew.keymaps"
 require "matthew.plugins"
+require "matthew.treesitter"
 require "matthew.colorscheme"
 require "matthew.cmp"
 require "matthew.lsp"
