@@ -10,15 +10,18 @@ end
 
 local tree_cb = nvim_tree_config.nvim_tree_callback
 
-vim.g.nvim_tree_quit_on_open = 1
-
 nvim_tree.setup {
+  actions = {
+    open_file = {
+      resize_window = true,
+      quit_on_open = true,
+    },
+  },
   ignore_ft_on_setup = {
     "startify",
     "dashboard",
     "alpha",
   },
-  auto_close = true,
   diagnostics = {
     enable = true,
   },
@@ -27,7 +30,6 @@ nvim_tree.setup {
     update_cwd = true,
   },
   view = {
-    auto_resize = true,
     mappings = {
       list = {
         { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
@@ -36,13 +38,16 @@ nvim_tree.setup {
       },
     },
   },
-  git_hl = 1,
-  root_folder_modifier = ":t",
-  show_icons = {
-    git = 1,
-    folders = 1,
-    files = 1,
-    folder_arrows = 1,
-    tree_width = 30,
+  renderer = {
+    root_folder_modifier = ":t",
+    highlight_git = true,
+    icons = {
+      show = {
+        git = true,
+        folder = true,
+        folder_arrow = true,
+        file = true,
+      },
+    },
   },
 }
