@@ -30,7 +30,7 @@ function _GIT_TOGGLE()
 	gitui:toggle()
 end
 
-local nvimconfig = Terminal:new({ cmd = "nvim -c \"Telescope git_files\"", dir = "~/Development/dotfiles/nvim", hidden = true })
+local nvimconfig = Terminal:new({ cmd = "nvim -c \"Telescope git_files\"", dir = "$HOME/Development/dotfiles/nvim", hidden = true })
 function _EDIT_NVIM_CONFIG()
   nvimconfig:toggle()
 end
