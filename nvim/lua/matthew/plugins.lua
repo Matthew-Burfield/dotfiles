@@ -80,6 +80,14 @@ return packer.startup(function(use)
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("JoosepAlviste/nvim-ts-context-commentstring") -- contextual commenting
 
+	-- Git
+	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
+	use({ "f-person/git-blame.nvim" })
+	use({ "https://tpope.io/vim/fugitive.git" })
+
+	-- Package.json
+	use({ "vuki656/package-info.nvim", requires = "MunifTanjim/nui.nvim" })
+
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
