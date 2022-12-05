@@ -31,7 +31,7 @@ function _GIT_TOGGLE()
 end
 
 local nvimconfig =
-	Terminal:new({ cmd = 'nvim -c "Telescope git_files"', dir = "$HOME/Development/dotfiles/nvim", hidden = true })
+	Terminal:new({ cmd = 'nvim -c "Telescope git_files"', dir = "$HOME/.config/nvim", hidden = true })
 function _EDIT_NVIM_CONFIG()
 	nvimconfig:toggle()
 end

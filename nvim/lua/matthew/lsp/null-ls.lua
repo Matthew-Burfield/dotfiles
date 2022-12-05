@@ -13,7 +13,7 @@ null_ls.setup({
 	debug = false,
 	sources = {
 		formatting.prettierd,
-		formatting.stylua,
+		--[[ formatting.stylua, ]]
 		diagnostics.eslint_d,
 	},
 	on_attach = function(client, bufnr)
@@ -24,7 +24,7 @@ null_ls.setup({
 				buffer = bufnr,
 				callback = function()
 					-- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
-					vim.lsp.buf.format()
+					vim.lsp.buf.format({ bufnr = bufnr })
 				end,
 			})
 		end

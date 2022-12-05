@@ -51,7 +51,8 @@ return packer.startup(function(use)
 	use("nvim-lualine/lualine.nvim") -- The status bar at the bottom of the screen
 
 	-- Colorschemes
-	use("haishanh/night-owl.vim")
+	--[[ use("haishanh/night-owl.vim") ]]
+  use("sainnhe/everforest")
 
 	-- cmp plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
@@ -68,8 +69,10 @@ return packer.startup(function(use)
 
 	-- LSP
 	use("neovim/nvim-lspconfig") -- enable LSP
-	use("williamboman/nvim-lsp-installer") -- simple to use language server installer
+  use({ "williamboman/mason.nvim"}) -- simple to use language server installer
+  use({ "williamboman/mason-lspconfig.nvim"})
 	use("jose-elias-alvarez/null-ls.nvim") -- formatting and diagnostics server that works with LSP
+  use({ "RRethy/vim-illuminate" })
 
 	-- Telescope
 	use("nvim-telescope/telescope.nvim")
@@ -79,6 +82,7 @@ return packer.startup(function(use)
 	-- Treesitter
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("JoosepAlviste/nvim-ts-context-commentstring") -- contextual commenting
+
 
 	-- Git
 	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
