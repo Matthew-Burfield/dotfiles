@@ -26,6 +26,17 @@ keymap("n", "<C-u>", "<C-u>zz", opts)
 -- Ignore visual mode
 keymap("n", "Q", "<nop>", opts)
 
+-- [[ Highlight on yank ]]
+-- See `:help vim.highlight.on_yank()`
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
+})
+
 -- Open up file explorer
 keymap("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", opts)
 
@@ -59,9 +70,36 @@ keymap("v", "<leader>y", '"+y', opts)
 keymap("v", "<leader>d", '"_d', opts)
 
 -- Telescope
-keymap("n", "<C-p>", '<cmd>lua require("telescope.builtin").git_files()<CR>', opts)
-keymap("n", "<leader>ff", '<cmd>lua require("telescope.builtin").find_files()<CR>', opts)
-keymap("n", "<leader>fb", '<cmd>lua require("telescope").extensions.file_browser.file_browser()<CR>', opts)
+keymap(
+	"n",
+	"<leader>sf",
+	'<cmd>lua require("telescope.builtin").find_files()<CR>',
+	{ desc = "[S]earch [F]iles", noremap = true, silent = true }
+)
+keymap(
+	"n",
+	"<leader>sh",
+	'<cmd>lua require("telescope.builtin").help_tags()<CR>',
+	{ desc = "[S]earch [H]elp", noremap = true, silent = true }
+)
+keymap(
+	"n",
+	"<leader>sw",
+	'<cmd>lua require("telescope.builtin").grep_string()<CR>',
+	{ desc = "[S]earch current [W]ord", noremap = true, silent = true }
+)
+keymap(
+	"n",
+	"<leader>sg",
+	'<cmd>lua require("telescope.builtin").live_grep()<CR>',
+	{ desc = "[S]earch by [G]rep", noremap = true, silent = true }
+)
+keymap(
+	"n",
+	"<leader>sd",
+	'<cmd>lua require("telescope.builtin").extensions.diagnostics()<CR>',
+	{ desc = "[S]earch [D]iagnostics", noremap = true, silent = true }
+)
 -- Search and replace
 keymap(
 	"n",

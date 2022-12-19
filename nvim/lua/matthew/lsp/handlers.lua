@@ -1,7 +1,7 @@
 local M = {}
 
-local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not status_ok then
+local cmp_status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+if not cmp_status_ok then
 	return
 end
 
@@ -52,20 +52,35 @@ M.setup = function()
 end
 
 local function lsp_keymaps(bufnr)
-	local opts = { noremap = true, silent = true }
-  local keymap = vim.api.nvim_buf_set_keymap
-	keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-	keymap(bufnr, "n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-	keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-	keymap(bufnr, "n", "ga", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-	keymap(bufnr, "n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>', opts)
-	keymap(bufnr, "n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>', opts)
-	keymap(bufnr, "n", "gl", "<cmd>lua vim.diagnostic.open_float<CR>", opts)
-	-- keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+	local nmap = function(keys, func, desc)
+		local keymap = vim.api.nvim_buf_set_keymap
+		if desc then
+			desc = "LSP: " .. desc
+		end
+		keymap(bufnr, "n", keys, func, { noremap = true, silent = true, desc = desc })
+	end
+	nmap("<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", "[R]e[n]ame")
+	nmap("<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", "[C]ode [A]ction")
+
+	nmap("gd", "<cmd>lua vim.lsp.buf.definition()<CR>", "[G]oto [D]efinition")
+	nmap("gr", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", "[G]oto [R]eferences")
+	nmap("gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", "[G]oto [I]mplementation")
+	nmap("<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Type [D]efinition")
+	nmap("<leader>ds", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>", "[D]ocument [S]ymbols")
+	nmap(
+		"<leader>ws",
+		"<cmd>lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<CR>",
+		"[W]orkspace [S]ymbols"
+	)
+
+	-- See `:help K` for why this keymap
+	nmap("K", "<cmd>lua vim.lsp.buf.hover()<CR>", "Hover Documentation")
+	nmap("<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Documentation")
+
+	nmap("]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>')
+	nmap("[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>')
+	nmap("gl", "<cmd>lua vim.diagnostic.open_float<CR>")
+	nmap("<leader>q", "<cmd>lua vim.diagnostic.setloclist<CR>")
 end
 
 M.on_attach = function(client, bufnr)
@@ -74,14 +89,14 @@ M.on_attach = function(client, bufnr)
 		client.resolved_capabilities.document_formatting = false
 	end
 
-  if client.name == "sumneko_lua" then
+	if client.name == "sumneko_lua" then
 		client.server_capabilities.documentFormattingProvider = false
-  end
+	end
 
 	lsp_keymaps(bufnr)
 
-  local status_ok, illuminate = pcall(require, "illuminate")
-	if not status_ok then
+	local illuminate_status_ok, illuminate = pcall(require, "illuminate")
+	if not illuminate_status_ok then
 		return
 	end
 

@@ -11,7 +11,11 @@ if fn.empty(fn.glob(install_path)) > 0 then
 		"https://github.com/wbthomason/packer.nvim",
 		install_path,
 	})
-	print("Installing packer close and reopen Neovim...")
+  print '=================================='
+  print '    Plugins are being installed'
+  print '    Wait until Packer completes,'
+  print '       then restart nvim'
+  print '=================================='
 	vim.cmd([[packadd packer.nvim]])
 end
 
@@ -40,10 +44,57 @@ packer.init({
 
 -- Install your plugins here
 return packer.startup(function(use)
-	-- My plugins here
+	-- Package manager
 	use("wbthomason/packer.nvim") -- Have packer manage itself
-	--use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
-	use("nvim-lua/plenary.nvim") -- Useful lua functions used ny lots of plugins
+
+	-- LSP configuration and plugins
+	use({
+		"neovim/nvim-lspconfig",
+		requires = {
+			-- Automatically install LSPs to stdpath for neovim
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+		},
+	})
+
+	-- Formatting and diagnostics server that works with LSP
+	use("jose-elias-alvarez/null-ls.nvim")
+
+	-- Autocompletion
+	use({
+		"hrsh7th/nvim-cmp",
+		requires = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lua",
+			"hrsh7th/cmp-buffer", -- buffer completions
+			"hrsh7th/cmp-path", -- path completions
+			"hrsh7th/cmp-cmdline", -- cmdline completions
+			"saadparwaiz1/cmp_luasnip", -- snippet completions
+		},
+	})
+
+	-- Highlight, edit and navigate code
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		run = function()
+			pcall(require("nvim-treesitter.install").update({ with_sync = true }))
+		end,
+	})
+
+	-- Fuzzy finder (files, lsp, etc)
+	use({ "nvim-telescope/telescope.nvim", requires = { "nvim-lua/plenary.nvim" } })
+
+	-- Fuzzy finder algorithm which requires local dependencies to be built. Only load if `make` is available
+	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+	use("nvim-telescope/telescope-file-browser.nvim")
+
+	-- Git related plugins
+	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
+	use({ "f-person/git-blame.nvim" })
+	use({ "https://tpope.io/vim/fugitive.git", as = "fugitive" })
+
+	-- Other neovim plugins
+	use({ "RRethy/vim-illuminate" }) -- Automatically highlight the word under the cursor
 	use("kyazdani42/nvim-web-devicons") -- Cool icons inside telescope and diagnostics etc
 	use("kyazdani42/nvim-tree.lua") -- Replacement for netrw / file browser
 	use("numToStr/Comment.nvim") -- Easily comment stuff
@@ -52,47 +103,19 @@ return packer.startup(function(use)
 
 	-- Colorschemes
 	--[[ use("haishanh/night-owl.vim") ]]
-  use("sainnhe/everforest")
-
-	-- cmp plugins
-	use("hrsh7th/nvim-cmp") -- The completion plugin
-	use("hrsh7th/cmp-buffer") -- buffer completions
-	use("hrsh7th/cmp-path") -- path completions
-	use("hrsh7th/cmp-cmdline") -- cmdline completions
-	use("saadparwaiz1/cmp_luasnip") -- snippet completions
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-nvim-lua")
+	use("sainnhe/everforest")
 
 	-- snippets
 	use("L3MON4D3/LuaSnip") --snippet engine
 	use("rafamadriz/friendly-snippets") -- a bunch of snippets to use
 
-	-- LSP
-	use("neovim/nvim-lspconfig") -- enable LSP
-  use({ "williamboman/mason.nvim"}) -- simple to use language server installer
-  use({ "williamboman/mason-lspconfig.nvim"})
-	use("jose-elias-alvarez/null-ls.nvim") -- formatting and diagnostics server that works with LSP
-  use({ "RRethy/vim-illuminate" })
-
-	-- Telescope
-	use("nvim-telescope/telescope.nvim")
-	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-	use("nvim-telescope/telescope-file-browser.nvim")
-
 	-- Treesitter
-	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 	use("JoosepAlviste/nvim-ts-context-commentstring") -- contextual commenting
-
-
-	-- Git
-	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
-	use({ "f-person/git-blame.nvim" })
-	use({ "https://tpope.io/vim/fugitive.git" })
 
 	-- Package.json
 	use({ "vuki656/package-info.nvim", requires = "MunifTanjim/nui.nvim" })
 
-	-- Automatically set up your configuration after cloning packer.nvim
+-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
