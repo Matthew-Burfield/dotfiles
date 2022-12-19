@@ -13,7 +13,7 @@ null_ls.setup({
 	debug = false,
 	sources = {
 		formatting.prettierd,
-		--[[ formatting.stylua, ]]
+		formatting.stylua,
 		diagnostics.eslint_d,
 	},
 	on_attach = function(client, bufnr)

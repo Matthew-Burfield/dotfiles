@@ -3,10 +3,11 @@ local servers = {
 	-- "cssls",
 	"html",
 	"tsserver",
+  "tailwindcss",
 	--[[ "pyright", ]]
 	-- "bashls",
 	"jsonls",
-	-- "yamlls",
+	--[[ "yamlls", ]]
 }
 
 local settings = {
