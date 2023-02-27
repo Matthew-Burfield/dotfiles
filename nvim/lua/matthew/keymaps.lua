@@ -43,12 +43,6 @@ keymap("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", opts)
 -- Search for the word you are hoving over inside the current buffer
 keymap("n", "<leader>slw", '/<C-R>=escape(expand("<cWORD>"), "/")<CR><CR>', opts)
 
--- Do a global search for the currently hovered word and add all instances to the quick fix list
-keymap("n", "<leader>sgw", '<cmd>lua require("telescope.builtin").grep_string()<CR>', opts)
-
--- Do a local global subsitute on the current word
-keymap("n", "<leader>s", ":%s /<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>", opts)
-
 -- close all buffers except the current one
 keymap("n", "<leader>cab", ":%bdelete|edit #|normal `<CR>", opts)
 
@@ -97,7 +91,7 @@ keymap(
 keymap(
 	"n",
 	"<leader>sd",
-	'<cmd>lua require("telescope.builtin").extensions.diagnostics()<CR>',
+	'<cmd>lua require("telescope.builtin").diagnostics()<CR>',
 	{ desc = "[S]earch [D]iagnostics", noremap = true, silent = true }
 )
 -- Search and replace
